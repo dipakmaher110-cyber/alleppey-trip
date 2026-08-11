@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌴 2-Car Coastal Convoy to Alleppey! 🚗🚗💨</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
+  <!-- Leaflet CSS for Interactive Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <style>
+    :root {
+      --yellow: #ffd166;
+      --orange: #ff9f1c;
+      --pink: #ff6b6b;
+      --teal: #4ecdc4;
+      --blue: #118ab2;
+      --navy: #073b4c;
+      --bg-color: #f0f4f8;
+      --card-bg: #ffffff;
+      --border-radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #e0f2fe, #fef3c7);
+      color: var(--navy);
+      padding: 15px 10px;
+      min-height: 100vh;
+    }
+
+    .app-container {
+      max-width: 950px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Animated Header */
+    .hero-header {
+      background: linear-gradient(135deg, var(--orange), var(--pink));
+      color: white;
+      padding: 35px 20px;
+      border-radius: 28px;
+      text-align: center;
+      box-shadow: 0 12px 25px rgba(255, 107, 107, 0.3);
+      border: 4px solid #fff;
+      animation: floatHeader 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatHeader {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-6px); }
+    }
+
+    .hero-header h1 {
+      font-family: 'Fredoka', cursive;
+      font-size: 2.2rem;
+      margin-bottom: 6px;
+      text-shadow: 2px 2px 0px rgba(0,0,0,0.15);
+    }
+
+    .hero-header p {
+      font-weight: 700;
+      font-size: 1.1rem;
+      background: rgba(255, 255, 255, 0.2);
+      display: inline-block;
+      padding: 6px 18px;
+      border-radius: 50px;
+      margin-top: 5px;
+    }
+
+    /* Interactive Buttons */
+    .button-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--yellow);
+      color: var(--navy);
+      font-family: 'Fredoka', cursive;
+      font-size: 1.05rem;
+      padding: 12px 22px;
+      border-radius: 50px;
+      border: 3px solid var(--navy);
+      box-shadow: 0 5px 0px var(--navy);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .btn-action:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 0px var(--navy);
+      background: #ffe066;
+    }
+
+    .btn-action:active {
+      transform: translateY(3px) scale(0.98);
+      box-shadow: 0 2px 0px var(--navy);
+    }
+
+    .btn-pink {
+      background: var(--pink);
+      color: white;
+    }
+
+    /* Metric Badges */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 16px;
+    }
+
+    .metric-card {
+      background: var(--card-bg);
+      padding: 20px 15px;
+      border-radius: var(--border-radius);
+      text-align: center;
+      border: 3px solid var(--teal);
+      box-shadow: 0 6px 0px var(--teal);
+      transition: transform 0.2s;
+    }
+
+    .metric-card:nth-child(2) { border-color: var(--pink); box-shadow: 0 6px 0px var(--pink); }
+    .metric-card:nth-child(3) { border-color: var(--orange); box-shadow: 0 6px 0px var(--orange); }
+    .metric-card:nth-child(4) { border-color: var(--yellow); box-shadow: 0 6px 0px var(--yellow); }
+
+    .metric-card .icon {
+      font-size: 2rem;
+      margin-bottom: 4px;
+    }
+
+    .metric-card .value {
+      font-family: 'Fredoka', cursive;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .metric-card .label {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+
+    /* Section Cards */
+    .section-card {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 25px;
+      border: 3px solid #e2e8f0;
+      box-shadow: 0 8px 0px #e2e8f0;
+    }
+
+    .section-title {
+      font-family: 'Fredoka', cursive;
+      font-size: 1.4rem;
+      color: var(--navy);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Convoy Cards */
+    .vehicles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .vehicle-card {
+      background: #f8fafc;
+      border: 3px solid var(--teal);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 4px 0px var(--teal);
+    }
+
+    .vehicle-card.v2 {
+      border-color: var(--pink);
+      box-shadow: 0 4px 0px var(--pink);
+    }
+
+    .vehicle-card h3 {
+      font-family: 'Fredoka', cursive;
+      font-size: 1.2rem;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+
+    .vehicle-card ul {
+      list-style: none;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #475569;
+    }
+
+    .vehicle-card li {
+      margin-bottom: 8px;
+    }
+
+    /* Map Display */
+    #map {
+      height: 380px;
+      width: 100%;
+      border-radius: 16px;
+      border: 4px solid var(--blue);
+      box-shadow: 0 6px 0px var(--blue);
+    }
+
+    /* Timeline Plan */
+    .itinerary-list {
+      list-style: none;
+    }
+
+    .itinerary-item {
+      position: relative;
+      padding-left: 35px;
+      margin-bottom: 22px;
+    }
+
+    .itinerary-item:before {
+      content: "📍";
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-size: 1.2rem;
+    }
+
+    .itinerary-item:after {
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 28px;
+      width: 3px;
+      height: calc(100% - 10px);
+      background: var(--teal);
+    }
+
+    .itinerary-item:last-child:after {
+      display: none;
+    }
+
+    .itinerary-item h3 {
+      font-family: 'Fredoka', cursive;
+      font-size: 1.1rem;
+      color: var(--blue);
+      margin-bottom: 4px;
+    }
+
+    .itinerary-item p {
+      font-size: 0.95rem;
+      color: #475569;
+      font-weight: 600;
+    }
+
+    /* En-Route Stops */
+    .stops-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .stop-card {
+      background: #f1f5f9;
+      padding: 16px;
+      border-radius: 16px;
+      border: 2px dashed var(--blue);
+    }
+
+    .stop-card h4 {
+      font-family: 'Fredoka', cursive;
+      color: var(--pink);
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+    }
+
+    .stop-card p {
+      font-size: 0.9rem;
+      color: #475569;
+      font-weight: 600;
+    }
+
+    /* Calculation Assumptions */
+    .assumptions-box {
+      background: #fff9db;
+      border: 3px dashed var(--orange);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+
+    .assumptions-box h3 {
+      font-family: 'Fredoka', cursive;
+      color: #d9480f;
+      font-size: 1.15rem;
+      margin-bottom: 10px;
+    }
+
+    .assumptions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .assumption-item {
+      background: #ffffff;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #495057;
+      border: 2px solid #ffe066;
+    }
+
+    .assumption-item span {
+      color: var(--pink);
+    }
+
+    /* Budget Table */
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid #e2e8f0;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 14px;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    th {
+      background-color: var(--yellow);
+      color: var(--navy);
+      font-family: 'Fredoka', cursive;
+      font-size: 1rem;
+    }
+
+    td {
+      background-color: #fff;
+      border-bottom: 1px solid #f1f5f9;
+      font-weight: 700;
+    }
+
+    .highlight-row td {
+      background-color: #e6fcf5;
+      font-family: 'Fredoka', cursive;
+      font-size: 1.05rem;
+      color: #0ca678;
+    }
+
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--navy);
+    }
+
+    .form-control, select {
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 2px solid #cbd5e1;
+      font-size: 1rem;
+      font-weight: 700;
+      outline: none;
+    }
+
+    .member-input-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+      background: #f8fafc;
+      padding: 15px;
+      border-radius: 16px;
+      border: 2px dashed var(--teal);
+    }
+
+    /* Warning Alert */
+    .alert-box {
+      background: #fff5f5;
+      border: 3px dashed var(--pink);
+      padding: 14px;
+      border-radius: 16px;
+      color: #c53030;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    /* Modal / Popup */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(7, 59, 76, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 28px;
+      border: 4px solid var(--pink);
+      box-shadow: 0 12px 0px var(--pink);
+      padding: 25px;
+      animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .members-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .member-chip {
+      background: #f8fafc;
+      border: 2px solid var(--teal);
+      padding: 10px 14px;
+      border-radius: 50px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stops-flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .stop-chip {
+      background: #e0f2fe;
+      border: 2px solid var(--blue);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    footer {
+      text-align: center;
+      font-weight: 800;
+      color: #94a3b8;
+      margin-top: 20px;
+      padding-bottom: 20px;
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 10px 5px; }
+      .section-card { padding: 18px; }
+      header h1 { font-size: 1.6rem; }
+      #map { height: 300px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- Header Section -->
+    <div class="hero-header">
+      <h1 id="headerTitle">🌴 2-Car Coastal Convoy to Alleppey! 🚗🚗💨</h1>
+      <p>Chhatrapati Sambhajinagar ➔ Gokarna ➔ Kerala Backwaters</p>
+      
+      <div class="button-group">
+        <button class="btn-action" onclick="toggleMembersModal(true)">
+          👥 Road Trip Crew (<span id="headerCrewCount">8</span>)
+        </button>
+        <button class="btn-action btn-pink" onclick="toggleEditPanel()">
+          ✏️ Edit / Create Trip
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Metrics Badges -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="icon">💰</div>
+        <div class="value" id="badgePerPerson">~₹18,100</div>
+        <div class="label">Budget / Person</div>
+      </div>
+      <div class="metric-card">
+        <div class="icon">🚘</div>
+        <div class="value" id="badgeCarsCount">2 Convoy Cars</div>
+        <div class="label" id="badgeCarsName">XUV700 + XUV3XO</div>
+      </div>
+      <div class="metric-card">
+        <div class="icon">🗓️</div>
+        <div class="value" id="badgeDuration">6 Days</div>
+        <div class="label">Trip Duration</div>
+      </div>
+      <div class="metric-card">
+        <div class="icon">🛣️</div>
+        <div class="value" id="badgeMileage">3.6k - 4k km</div>
+        <div class="label">Per Car Mileage</div>
+      </div>
+    </div>
+
+    <!-- Convoy Vehicles Distribution -->
+    <div class="section-card">
+      <div class="section-title">🚘 Convoy Vehicle & Luggage Distribution</div>
+      <div class="vehicles-grid" id="vehiclesContainer">
+        <div class="vehicle-card" id="cardXUV700">
+          <h3>🚙 Vehicle 1: XUV700</h3>
+          <ul>
+            <li>💺 <b>Capacity:</b> 7 Seater Diesel</li>
+            <li>⛽ <b>Mileage Average:</b> 15 kmpl</li>
+            <li>🧳 <b>Role:</b> Comfortably seats 4-5 travelers with folded rear row for main heavy luggage storage!</li>
+            <li>⛽ <b>Estimated Fuel:</b> <span id="xuv700FuelStat">~253 Liters Diesel (@ ₹94/L = ~₹23,782)</span></li>
+          </ul>
+        </div>
+        <div class="vehicle-card v2" id="cardXUV3XO">
+          <h3>🚗 Vehicle 2: XUV3XO</h3>
+          <ul>
+            <li>💺 <b>Capacity:</b> 5 Seater Petrol</li>
+            <li>⛽ <b>Mileage Average:</b> 12 kmpl</li>
+            <li>🧳 <b>Role:</b> Comfortably seats 3-4 travelers with remaining light luggage in the boot!</li>
+            <li>⛽ <b>Estimated Fuel:</b> <span id="xuv3xoFuelStat">~317 Liters Petrol (@ ₹106/L = ~₹33,602)</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Map Section -->
+    <div class="section-card">
+      <div class="section-title">🗺️ Interactive Route Map</div>
+      <p style="margin-bottom: 12px; font-weight: 700; color: #64748b;">Tap or click markers along the route for location details!</p>
+      <div id="map"></div>
+    </div>
+
+    <!-- Day-Wise Adventure Plan -->
+    <div class="section-card">
+      <div class="section-title">📅 Day-Wise Adventure Plan</div>
+      <ul class="itinerary-list">
+        <li class="itinerary-item">
+          <h3>Day 1: Chhatrapati Sambhajinagar to Gokarna (~762 km)</h3>
+          <p>Early morning drive via NH 52 passing Solapur & Hubballi. Arrive in Gokarna by evening to catch the sunset at Om Beach or Kudle Beach! 🌅</p>
+        </li>
+        <li class="itinerary-item">
+          <h3>Day 2: Gokarna to Alleppey (~709 km)</h3>
+          <p>Coastal drive along NH 66! Quick stops at Murdeshwar Temple or Udupi. Reach Alleppey by evening. 🌊</p>
+        </li>
+        <li class="itinerary-item">
+          <h3>Day 3 & 4: Houseboats & Backwater Fun!</h3>
+          <p>Day 3: Relaxing houseboat / shikara ride in Vembanad Lake! 🛥️<br>Day 4: Beach fun at Alappuzha & Marari Beach + Kochi sightseeing!</p>
+        </li>
+        <li class="itinerary-item">
+          <h3>Day 5: Alleppey to Hubballi / Udupi (~700 km)</h3>
+          <p>Start heading back north along the coast. Evening stay & dinner stop near Udupi or Hubballi.</p>
+        </li>
+        <li class="itinerary-item">
+          <h3>Day 6: Drive Back Home (~420 km)</h3>
+          <p>Final leg of the trip back home to Chhatrapati Sambhajinagar via Solapur. Home by late afternoon! 🏠</p>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Fun Places On The Route -->
+    <div class="section-card">
+      <div class="section-title">🏕️ Fun Places On The Route</div>
+      <div class="stops-grid">
+        <div class="stop-card">
+          <h4>1. Hubballi</h4>
+          <p>Great pitstop city for hot South Indian breakfast and fuel refill!</p>
+        </div>
+        <div class="stop-card">
+          <h4>2. Gokarna</h4>
+          <p>Famous for giant ocean beaches, sea caves, and cozy beach cafes!</p>
+        </div>
+        <div class="stop-card">
+          <h4>3. Murdeshwar</h4>
+          <p>Huge Shiva statue and 20-story temple right next to the sea view!</p>
+        </div>
+        <div class="stop-card">
+          <h4>4. Udupi</h4>
+          <p>Clean beaches, boat rides to St. Mary's Island, and delicious food!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expense Split & Cost Breakdown -->
+    <div class="section-card">
+      <div class="section-title">💵 Expense Split & Cost Breakdown</div>
+      
+      <div class="assumptions-box">
+        <h3>🔍 How Costs Were Calculated:</h3>
+        <div class="assumptions-grid" id="assumptionsGrid">
+          <div class="assumption-item">
+            📏 <b>Distance / Car:</b> <span id="asmpDistance">3,600 km – 4,000 km</span>
+          </div>
+          <div class="assumption-item" id="asmpFuelXUV700">
+            🚙 <b>XUV700 Diesel Fuel:</b> <span>~253 L (@ 15 kmpl avg / ₹94 per L = ₹23,782)</span>
+          </div>
+          <div class="assumption-item" id="asmpFuelXUV3XO">
+            🚗 <b>XUV3XO Petrol Fuel:</b> <span>~317 L (@ 12 kmpl avg / ₹106 per L = ₹33,602)</span>
+          </div>
+          <div class="assumption-item">
+            ⛽ <b>Combined Total Fuel:</b> <span id="asmpTotalFuel">₹57,384</span>
+          </div>
+          <div class="assumption-item">
+            📄 <b>Tolls & Permits:</b> <span id="asmpTolls">₹15,000</span>
+          </div>
+          <div class="assumption-item">
+            🍱 <b>Food & Allowance:</b> <span id="asmpFood">₹1,000 / day / person</span>
+          </div>
+          <div class="assumption-item">
+            🎒 <b>Misc / Emergency Fund:</b> <span id="asmpMisc">₹3,000 / person</span>
+          </div>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Expense Head</th>
+            <th>Calculation Basis</th>
+            <th>Total Cost (₹)</th>
+            <th>Per Person</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>⛽ Combined Fuel</td>
+            <td id="tableFuelBasis">XUV700 Diesel (~₹23.7k) + XUV3XO Petrol (~₹33.6k)</td>
+            <td id="tableFuelTotal">₹57,384</td>
+            <td id="tableFuelPerPerson">₹7,173</td>
+          </tr>
+          <tr>
+            <td>🛣️ Tolls & State Tax</td>
+            <td id="tableTollBasis">2 Cars × (₹3,000 State Permit Tax + ~₹4,500 Tolls)</td>
+            <td id="tableTollTotal">₹15,000</td>
+            <td id="tableTollPerPerson">₹1,875</td>
+          </tr>
+          <tr>
+            <td>🍕 Food & Daily Allowance</td>
+            <td id="tableFoodBasis">₹1,000 / day × 6 Days × 8 People</td>
+            <td id="tableFoodTotal">₹48,000</td>
+            <td id="tableFoodPerPerson">₹6,000</td>
+          </tr>
+          <tr>
+            <td>🎒 Miscellaneous & Emergency Block</td>
+            <td id="tableMiscBasis">₹3,000 / person × 8 People</td>
+            <td id="tableMiscTotal">₹24,000</td>
+            <td id="tableMiscPerPerson">₹3,000</td>
+          </tr>
+          <tr class="highlight-row">
+            <td>🎉 Total Estimated Budget</td>
+            <td>All Driving Costs Shared Equally</td>
+            <td id="tableGrandTotal">₹1,44,384</td>
+            <td id="tableGrandPerPerson">₹18,048 (~₹18,000 - ₹18,500)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- COLLAPSIBLE EDIT & CUSTOM TRIP BUILDER (AT THE BOTTOM) -->
+    <div class="section-card" id="edit-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div class="section-title" style="margin-bottom: 0;">🛠️ Edit Route or Create Custom Trip</div>
+        <button class="btn-action btn-pink" onclick="toggleEditPanel()">
+          ✏️ <span id="toggleBtnLabel">Click Here to Edit / Customize</span>
+        </button>
+      </div>
+
+      <!-- Collapsible Container -->
+      <div id="editContainer" style="display: none; margin-top: 20px;">
+        
+        <!-- Add Route Stops -->
+        <div style="background: #f1f5f9; padding: 18px; border-radius: 16px; margin-bottom: 20px;">
+          <h4 style="font-family: 'Fredoka', cursive; color: var(--navy); margin-bottom: 10px;">📍 Add Extra Stop / Detour to Itinerary</h4>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <input type="text" id="newStopInput" class="form-control" style="flex: 1; min-width: 180px;" placeholder="Place Name (e.g., Mangalore)">
+            <input type="number" id="extraKmInput" class="form-control" style="width: 150px;" placeholder="+ Distance (km)">
+            <button type="button" class="btn-action" onclick="addCustomStop()">Add Stop</button>
+          </div>
+          <div class="stops-flex" id="stopsList" style="margin-top: 12px;">
+            <div class="stop-chip">📍 Hubballi</div>
+            <div class="stop-chip">📍 Gokarna</div>
+            <div class="stop-chip">📍 Murdeshwar</div>
+            <div class="stop-chip">📍 Udupi</div>
+            <div class="stop-chip">📍 Kochi</div>
+            <div class="stop-chip">📍 Alleppey</div>
+          </div>
+        </div>
+
+        <!-- Dynamic Trip Recalculator Form -->
+        <form id="tripBuilderForm" onsubmit="recalculateCustomTrip(event)">
+          <div class="alert-box" id="capacityWarning">
+            ⚠️ <b>Capacity Warning:</b> <span id="warningText"></span>
+          </div>
+
+          <div class="form-group">
+            <label>1. Total Travelers *</label>
+            <input type="number" id="numPeopleInput" class="form-control" min="1" max="20" value="8" required onchange="renderMemberInputs()">
+          </div>
+
+          <div class="form-group">
+            <label>2. Travelers Details (Mandatory) *</label>
+            <div class="member-input-grid" id="memberInputsBox">
+              <!-- Dynamically populated per person count -->
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>3. Select Vehicle Configuration *</label>
+            <select id="carConfigSelect" class="form-control" required onchange="checkCapacityRules()">
+              <option value="2_convoy" selected>2 Cars Convoy (XUV700 + XUV3XO)</option>
+              <option value="1_car">1 Vehicle Only</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="singleCarGroup" style="display: none;">
+            <label>4. Select Which Vehicle to Take *</label>
+            <select id="singleCarChoice" class="form-control" onchange="checkCapacityRules()">
+              <option value="XUV700">XUV700 (7-Seater Diesel | Max 7 Pax | 15 kmpl @ ₹94/L)</option>
+              <option value="XUV3XO">XUV3XO (5-Seater Petrol | Max 5 Pax | 12 kmpl @ ₹106/L)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>5. Trip Duration (Days) *</label>
+            <input type="number" id="tripDaysInput" class="form-control" min="1" value="6" required>
+          </div>
+
+          <div style="margin-top: 15px;">
+            <button type="submit" class="btn-action btn-pink" style="width: 100%;">
+              👇 Click Here to Update Estimation & Vehicles
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+    <footer>
+      <p id="footerText">🎈 2 Cars, 8 Friends, 1 Unforgettable Coastal Drive! 🎈</p>
+    </footer>
+
+  </div>
+
+  <!-- Group Members Modal -->
+  <div class="modal-overlay" id="membersModal">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-family: 'Fredoka', cursive; font-size: 1.4rem;">🚗 Road Trip Crew (<span id="modalCrewCount">8</span>)</h3>
+        <button class="btn-action" style="padding: 6px 14px; font-size: 0.9rem;" onclick="toggleMembersModal(false)">❌ Close</button>
+      </div>
+      <div class="members-list" id="modalMembersList">
+        <div class="member-chip">😎 Abhishek Thorat</div>
+        <div class="member-chip">🏎️ Vishal Paikrao</div>
+        <div class="member-chip">⛺ Deore Pawan</div>
+        <div class="member-chip">🎒 Umesh Mhaske</div>
+        <div class="member-chip">📸 Adil Patel</div>
+        <div class="member-chip">🎧 Mahesh Chaudhari</div>
+        <div class="member-chip">🗺️ Rahul Kale</div>
+        <div class="member-chip">👑 Dipak Maher</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    // Initialize Leaflet Map
+    let map = L.map('map').setView([14.5, 75.0], 6);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    let waypoints = [
+      { name: "Chhatrapati Sambhajinagar 🚩", coords: [19.8762, 75.3433] },
+      { name: "Hubballi 🥪", coords: [15.3647, 75.1240] },
+      { name: "Gokarna 🏖️", coords: [14.5479, 74.3188] },
+      { name: "Murdeshwar 🕉️", coords: [14.0940, 74.4892] },
+      { name: "Udupi 🏝️", coords: [13.3409, 74.7421] },
+      { name: "Kochi ⛵", coords: [9.9312, 76.2673] },
+      { name: "Alleppey 🛥️", coords: [9.4981, 76.3388] }
+    ];
+
+    let markers = [];
+    let polyline;
+
+    function renderMap() {
+      markers.forEach(m => map.removeLayer(m));
+      if (polyline) map.removeLayer(polyline);
+
+      let latLngs = [];
+      waypoints.forEach((pt, idx) => {
+        latLngs.push(pt.coords);
+        let m = L.marker(pt.coords).addTo(map).bindPopup(`<b>Stop ${idx + 1}: ${pt.name}</b>`);
+        markers.push(m);
+      });
+
+      polyline = L.polyline(latLngs, { color: '#ff6b6b', weight: 5, opacity: 0.8, dashArray: '10, 10' }).addTo(map);
+      map.fitBounds(polyline.getBounds(), { padding: [30, 30] });
+    }
+
+    renderMap();
+
+    // Base Distance Parameters
+    let baseDistanceKm = 3800;
+    let extraDistanceKm = 0;
+
+    // Modal Controls
+    function toggleMembersModal(show) {
+      document.getElementById('membersModal').style.display = show ? 'flex' : 'none';
+    }
+
+    // Toggle Collapsible Edit Section
+    function toggleEditPanel() {
+      let panel = document.getElementById('editContainer');
+      let label = document.getElementById('toggleBtnLabel');
+      if (panel.style.display === 'none' || panel.style.display === '') {
+        panel.style.display = 'block';
+        label.innerText = 'Close Form';
+        renderMemberInputs();
+      } else {
+        panel.style.display = 'none';
+        label.innerText = 'Click Here to Edit / Customize';
+      }
+    }
+
+    // Populate Traveler Inputs Dynamically
+    const defaultGroup = [
+      "Abhishek Thorat", "Vishal Paikrao", "Deore Pawan", "Umesh Mhaske",
+      "Adil Patel", "Mahesh Chaudhari", "Rahul Kale", "Dipak Maher"
+    ];
+
+    function renderMemberInputs() {
+      let count = parseInt(document.getElementById('numPeopleInput').value) || 1;
+      let box = document.getElementById('memberInputsBox');
+      box.innerHTML = '';
+
+      for (let i = 1; i <= count; i++) {
+        let nameVal = defaultGroup[i - 1] || `Traveler ${i}`;
+        let div = document.createElement('div');
+        div.innerHTML = `
+          <label style="font-size:0.8rem; font-weight:700;">Member ${i} Name:</label>
+          <input type="text" class="member-name-input form-control" style="padding:8px 12px; font-size:0.9rem;" value="${nameVal}" required>
+        `;
+        box.appendChild(div);
+      }
+      checkCapacityRules();
+    }
+
+    // Capacity Rules & Warning Alerts
+    function checkCapacityRules() {
+      let people = parseInt(document.getElementById('numPeopleInput').value) || 0;
+      let carConfig = document.getElementById('carConfigSelect').value;
+      let singleCarGroup = document.getElementById('singleCarGroup');
+      let warningBox = document.getElementById('capacityWarning');
+      let warningText = document.getElementById('warningText');
+
+      if (carConfig === '1_car') {
+        singleCarGroup.style.display = 'flex';
+        let choice = document.getElementById('singleCarChoice').value;
+
+        if (choice === 'XUV3XO' && people > 5) {
+          warningBox.style.display = 'block';
+          warningText.innerText = `XUV3XO maximum seating capacity is 5 people! You entered ${people} travelers. Select 2 cars or switch to XUV700.`;
+          return false;
+        } else if (choice === 'XUV700' && people > 7) {
+          warningBox.style.display = 'block';
+          warningText.innerText = `XUV700 maximum seating capacity is 7 people! You entered ${people} travelers. Please select 2 Convoy cars.`;
+          return false;
+        } else {
+          warningBox.style.display = 'none';
+        }
+      } else {
+        singleCarGroup.style.display = 'none';
+        if (people > 12) {
+          warningBox.style.display = 'block';
+          warningText.innerText = `2 Convoy cars combined (7-Seater + 5-Seater) carry a maximum of 12 people.`;
+          return false;
+        } else {
+          warningBox.style.display = 'none';
+        }
+      }
+      return true;
+    }
+
+    // Add Route Stop
+    function addCustomStop() {
+      let nameIn = document.getElementById('newStopInput');
+      let kmIn = document.getElementById('extraKmInput');
+      let name = nameIn.value.trim();
+      let extra = parseFloat(kmIn.value) || 0;
+
+      if (!name) {
+        alert('Please enter a place name!');
+        return;
+      }
+
+      let stopsList = document.getElementById('stopsList');
+      let chip = document.createElement('div');
+      chip.className = 'stop-chip';
+      chip.innerHTML = `📍 ${name} (+${extra} km) <span style="cursor:pointer; color:var(--pink);" onclick="removeStop(this, ${extra})">✕</span>`;
+      stopsList.appendChild(chip);
+
+      extraDistanceKm += extra;
+      updateCalculations();
+
+      nameIn.value = '';
+      kmIn.value = '';
+    }
+
+    function removeStop(el, extra) {
+      el.parentElement.remove();
+      extraDistanceKm -= extra;
+      if (extraDistanceKm < 0) extraDistanceKm = 0;
+      updateCalculations();
+    }
+
+    // Recalculation Core & Automatic Car Card Updates
+    function updateCalculations() {
+      let dist = baseDistanceKm + extraDistanceKm;
+      let people = parseInt(document.getElementById('numPeopleInput').value) || 8;
+      let days = parseInt(document.getElementById('tripDaysInput').value) || 6;
+      let carConfig = document.getElementById('carConfigSelect').value;
+
+      // Update Member Modal & Crew Counts
+      document.getElementById('headerCrewCount').innerText = people;
+      document.getElementById('modalCrewCount').innerText = people;
+
+      let nameInputs = document.querySelectorAll('.member-name-input');
+      let modalList = document.getElementById('modalMembersList');
+      if (nameInputs.length > 0 && modalList) {
+        modalList.innerHTML = '';
+        nameInputs.forEach((inp, idx) => {
+          let icons = ["😎", "🏎️", "⛺", "🎒", "📸", "🎧", "🗺️", "👑"];
+          let icon = icons[idx % icons.length];
+          let chip = document.createElement('div');
+          chip.className = 'member-chip';
+          chip.innerHTML = `${icon} ${inp.value || 'Traveler ' + (idx + 1)}`;
+          modalList.appendChild(chip);
+        });
+      }
+
+      let fuelTotal = 0;
+      let tollsTotal = 0;
+
+      let xuv700FuelLiters = (dist / 15);
+      let xuv700FuelCost = xuv700FuelLiters * 94;
+      let xuv3xoFuelLiters = (dist / 12);
+      let xuv3xoFuelCost = xuv3xoFuelLiters * 106;
+
+      let card700 = document.getElementById('cardXUV700');
+      let card3XO = document.getElementById('cardXUV3XO');
+      let vContainer = document.getElementById('vehiclesContainer');
+
+      if (carConfig === '2_convoy') {
+        fuelTotal = xuv700FuelCost + xuv3xoFuelCost;
+        tollsTotal = 15000;
+
+        // Display both cars
+        card700.style.display = 'block';
+        card3XO.style.display = 'block';
+        vContainer.style.gridTemplateColumns = 'repeat(auto-fit, minmax(280px, 1fr))';
+
+        document.getElementById('headerTitle').innerText = '🌴 2-Car Coastal Convoy to Alleppey! 🚗🚗💨';
+        document.getElementById('badgeCarsCount').innerText = '2 Convoy Cars';
+        document.getElementById('badgeCarsName').innerText = 'XUV700 + XUV3XO';
+        document.getElementById('footerText').innerText = `🎈 2 Cars, ${people} Friends, 1 Unforgettable Coastal Drive! 🎈`;
+
+        document.getElementById('xuv700FuelStat').innerText = `~${Math.round(xuv700FuelLiters)} Liters Diesel (@ ₹94/L = ~₹${Math.round(xuv700FuelCost).toLocaleString('en-IN')})`;
+        document.getElementById('xuv3xoFuelStat').innerText = `~${Math.round(xuv3xoFuelLiters)} Liters Petrol (@ ₹106/L = ~₹${Math.round(xuv3xoFuelCost).toLocaleString('en-IN')})`;
+
+        document.getElementById('asmpFuelXUV700').style.display = 'block';
+        document.getElementById('asmpFuelXUV3XO').style.display = 'block';
+        document.getElementById('asmpFuelXUV700').innerHTML = `🚙 <b>XUV700 Diesel Fuel:</b> <span>~${Math.round(xuv700FuelLiters)} L (@ 15 kmpl avg / ₹94 per L = ₹${Math.round(xuv700FuelCost).toLocaleString('en-IN')})</span>`;
+        document.getElementById('asmpFuelXUV3XO').innerHTML = `🚗 <b>XUV3XO Petrol Fuel:</b> <span>~${Math.round(xuv3xoFuelLiters)} L (@ 12 kmpl avg / ₹106 per L = ₹${Math.round(xuv3xoFuelCost).toLocaleString('en-IN')})</span>`;
+
+        document.getElementById('tableFuelBasis').innerText = `XUV700 Diesel (~₹${Math.round(xuv700FuelCost/1000)}k) + XUV3XO Petrol (~₹${Math.round(xuv3xoFuelCost/1000)}k)`;
+        document.getElementById('tableTollBasis').innerText = `2 Cars × (₹3,000 State Permit Tax + ~₹4,500 Tolls)`;
+      } else {
+        let choice = document.getElementById('singleCarChoice').value;
+        tollsTotal = 7500;
+        vContainer.style.gridTemplateColumns = '1fr';
+
+        if (choice === 'XUV700') {
+          fuelTotal = xuv700FuelCost;
+          card700.style.display = 'block';
+          card3XO.style.display = 'none';
+
+          document.getElementById('headerTitle').innerText = '🌴 Coastal Drive to Alleppey in XUV700! 🚗💨';
+          document.getElementById('badgeCarsCount').innerText = '1 Vehicle';
+          document.getElementById('badgeCarsName').innerText = 'XUV700 (Diesel)';
+          document.getElementById('xuv700FuelStat').innerText = `~${Math.round(xuv700FuelLiters)} Liters Diesel (@ ₹94/L = ~₹${Math.round(xuv700FuelCost).toLocaleString('en-IN')})`;
+
+          document.getElementById('asmpFuelXUV700').style.display = 'block';
+          document.getElementById('asmpFuelXUV3XO').style.display = 'none';
+          document.getElementById('asmpFuelXUV700').innerHTML = `🚙 <b>XUV700 Diesel Fuel:</b> <span>~${Math.round(xuv700FuelLiters)} L (@ 15 kmpl avg / ₹94 per L = ₹${Math.round(xuv700FuelCost).toLocaleString('en-IN')})</span>`;
+
+          document.getElementById('tableFuelBasis').innerText = `XUV700 Diesel (~${Math.round(xuv700FuelLiters)} L @ ₹94/L)`;
+        } else {
+          fuelTotal = xuv3xoFuelCost;
+          card700.style.display = 'none';
+          card3XO.style.display = 'block';
+
+          document.getElementById('headerTitle').innerText = '🌴 Coastal Drive to Alleppey in XUV3XO! 🚗💨';
+          document.getElementById('badgeCarsCount').innerText = '1 Vehicle';
+          document.getElementById('badgeCarsName').innerText = 'XUV3XO (Petrol)';
+          document.getElementById('xuv3xoFuelStat').innerText = `~${Math.round(xuv3xoFuelLiters)} Liters Petrol (@ ₹106/L = ~₹${Math.round(xuv3xoFuelCost).toLocaleString('en-IN')})`;
+
+          document.getElementById('asmpFuelXUV700').style.display = 'none';
+          document.getElementById('asmpFuelXUV3XO').style.display = 'block';
+          document.getElementById('asmpFuelXUV3XO').innerHTML = `🚗 <b>XUV3XO Petrol Fuel:</b> <span>~${Math.round(xuv3xoFuelLiters)} L (@ 12 kmpl avg / ₹106 per L = ₹${Math.round(xuv3xoFuelCost).toLocaleString('en-IN')})</span>`;
+
+          document.getElementById('tableFuelBasis').innerText = `XUV3XO Petrol (~${Math.round(xuv3xoFuelLiters)} L @ ₹106/L)`;
+        }
+
+        document.getElementById('footerText').innerText = `🎈 1 Car, ${people} Friends, 1 Unforgettable Coastal Drive! 🎈`;
+        document.getElementById('tableTollBasis').innerText = `1 Car × (₹3,000 State Permit Tax + ~₹4,500 Tolls)`;
+      }
+
+      let foodTotal = days * 1000 * people;
+      let miscTotal = 3000 * people;
+      let grandTotal = fuelTotal + tollsTotal + foodTotal + miscTotal;
+      let perPerson = grandTotal / people;
+
+      document.getElementById('badgePerPerson').innerText = `~₹${Math.round(perPerson).toLocaleString('en-IN')}`;
+      document.getElementById('badgeDuration').innerText = `${days} Days`;
+      document.getElementById('asmpDistance').innerText = `${dist.toLocaleString('en-IN')} km Total`;
+
+      document.getElementById('asmpTotalFuel').innerText = `₹${Math.round(fuelTotal).toLocaleString('en-IN')}`;
+      document.getElementById('asmpTolls').innerText = `₹${Math.round(tollsTotal).toLocaleString('en-IN')}`;
+      document.getElementById('asmpFood').innerText = `₹1,000 / day / person (${days} days = ₹${(days*1000).toLocaleString('en-IN')} / person)`;
+
+      document.getElementById('tableFuelTotal').innerText = `₹${Math.round(fuelTotal).toLocaleString('en-IN')}`;
+      document.getElementById('tableFuelPerPerson').innerText = `₹${Math.round(fuelTotal / people).toLocaleString('en-IN')}`;
+
+      document.getElementById('tableTollTotal').innerText = `₹${Math.round(tollsTotal).toLocaleString('en-IN')}`;
+      document.getElementById('tableTollPerPerson').innerText = `₹${Math.round(tollsTotal / people).toLocaleString('en-IN')}`;
+
+      document.getElementById('tableFoodBasis').innerText = `₹1,000 / day × ${days} Days × ${people} People`;
+      document.getElementById('tableFoodTotal').innerText = `₹${Math.round(foodTotal).toLocaleString('en-IN')}`;
+      document.getElementById('tableFoodPerPerson').innerText = `₹${Math.round(foodTotal / people).toLocaleString('en-IN')}`;
+
+      document.getElementById('tableMiscBasis').innerText = `₹3,000 / person × ${people} People`;
+      document.getElementById('tableMiscTotal').innerText = `₹${Math.round(miscTotal).toLocaleString('en-IN')}`;
+      document.getElementById('tableMiscPerPerson').innerText = `₹${Math.round(miscTotal / people).toLocaleString('en-IN')}`;
+
+      document.getElementById('tableGrandTotal').innerText = `₹${Math.round(grandTotal).toLocaleString('en-IN')}`;
+      document.getElementById('tableGrandPerPerson').innerText = `₹${Math.round(perPerson).toLocaleString('en-IN')} (~₹${Math.round(perPerson/500)*500})`;
+    }
+
+    function recalculateCustomTrip(e) {
+      e.preventDefault();
+      if (!checkCapacityRules()) return;
+      updateCalculations();
+      alert('🎉 Trip calculation & vehicle distribution updated successfully!');
+      toggleEditPanel();
+    }
+  </script>
+</body>
+</html>
